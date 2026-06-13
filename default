@@ -1,6 +1,4 @@
-#profile-title: penetrate
-#profile-web-page-url: https://penetratevpn.github.io
-#announce: Telegram: @penetratevpn
+
 vless://1111191b-5ecc-4bd9-9113-bb35531130ed@br3.aerosafe.work:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=adtn17.workspacefiles.com&pbk=XI8HVxd0VSPez_d2CuNH-x24xxwvz-l1e3J0TnrbvjI&sid=11324b236ccd7b0a&spx=%2F&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany%201
 vless://1111191b-5ecc-4bd9-9113-bb35531130ed@br4.aerosafe.work:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=adtn17.workspacefiles.com&pbk=XI8HVxd0VSPez_d2CuNH-x24xxwvz-l1e3J0TnrbvjI&sid=b2caea162a265031&spx=%2F&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany%202
 vless://576e439c-c116-48a7-986c-481c7ce07b1c@de.hagrid-connected.com:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=de.hagrid-connected.com&fp=random&pbk=nfkwd9xJCoNuWrvvieBB9VfpcDldsARAdFPL0dF5A1Q&sid=305570274c0c72cc#%F0%9F%87%A9%F0%9F%87%AA%20Germany%203
