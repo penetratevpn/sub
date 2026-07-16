@@ -1,0 +1,96 @@
+name: Refresh default subscriptions
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-default
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: '1'
+      SUBS_SECRET: ${{ secrets.VPN_SUBS }}
+      HWID_SECRET: ${{ secrets.VPN_HWID }}
+      XRAY_VERSION: '1.8.24'
+      THREADS: '24'
+      TIMEOUT: '8'
+      REMARK_FORMAT: '{flag} {country}{index_suffix}'
+      REMARK_LANGUAGE: 'en'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: requirements.txt
+
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Install Xray
+        run: |
+          curl -fsSL -o xray.zip https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-64.zip
+          python - <<'PY'
+          import zipfile
+          with zipfile.ZipFile('xray.zip') as zf:
+              zf.extractall('xray-bin')
+          PY
+          chmod +x xray-bin/xray
+          ./xray-bin/xray version
+
+      - name: Validate required secrets
+        run: |
+          test -n "$SUBS_SECRET" || { echo 'VPN_SUBS secret is missing'; exit 1; }
+
+      - name: Prepare private subscriptions file
+        run: |
+          umask 077
+          printf '%s\n' "$SUBS_SECRET" > subs.private.txt
+
+      - name: Refresh default file
+        run: |
+          if [ -n "$HWID_SECRET" ]; then
+            python update_default.py \
+              --default default \
+              --subs subs.private.txt \
+              --hwid "$HWID_SECRET" \
+              --xray ./xray-bin/xray \
+              --download-geoip \
+              --threads "$THREADS" \
+              --timeout "$TIMEOUT" \
+              --remark-format "$REMARK_FORMAT" \
+              --remark-language "$REMARK_LANGUAGE"
+          else
+            python update_default.py \
+              --default default \
+              --subs subs.private.txt \
+              --xray ./xray-bin/xray \
+              --download-geoip \
+              --threads "$THREADS" \
+              --timeout "$TIMEOUT" \
+              --remark-format "$REMARK_FORMAT" \
+              --remark-language "$REMARK_LANGUAGE"
+          fi
+
+      - name: Commit updated default
+        run: |
+          if git diff --quiet -- default; then
+            echo 'No changes to commit'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add default
+          git commit -m 'chore: refresh default subscriptions'
+          git push
