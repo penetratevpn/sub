@@ -1,3 +1,9 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
+vless://14c15a5c-deae-4d41-afac-2f1046bc71c7@multi.fresedvpn.site:61080?encryption=none&security=reality&sni=api-maps.yandex.ru&pbk=ISGeEtxbWkEaAjOcCL7lX67ZsrNmCP0nn0r8GBCXdX0&sid=d68957cc02d1d411&type=tcp#%F0%9F%87%A6%F0%9F%87%B9%20Austria
+vless://14c15a5c-deae-4d41-afac-2f1046bc71c7@multi.fresedvpn.site:53080?encryption=none&security=reality&sni=api-maps.yandex.ru&pbk=ISGeEtxbWkEaAjOcCL7lX67ZsrNmCP0nn0r8GBCXdX0&sid=282bb63ff7a6101d&type=tcp#%F0%9F%87%A7%F0%9F%87%BE%20Belarus
+vless://14c15a5c-deae-4d41-afac-2f1046bc71c7@multi.fresedvpn.site:51080?encryption=none&security=reality&sni=api-maps.yandex.ru&pbk=ISGeEtxbWkEaAjOcCL7lX67ZsrNmCP0nn0r8GBCXdX0&sid=c9ca7a4c133cf5dd&type=tcp#%F0%9F%87%A8%F0%9F%87%A6%20Canada
+vless://14c15a5c-deae-4d41-afac-2f1046bc71c7@multi.fresedvpn.site:38862?encryption=none&security=reality&sni=api-maps.yandex.ru&pbk=ISGeEtxbWkEaAjOcCL7lX67ZsrNmCP0nn0r8GBCXdX0&sid=fba8ff661fa8e619&type=tcp#%F0%9F%87%AB%F0%9F%87%AE%20Finland
+vless://14c15a5c-deae-4d41-afac-2f1046bc71c7@multi.fresedvpn.site:26206?encryption=none&security=reality&sni=api-maps.yandex.ru&pbk=ISGeEtxbWkEaAjOcCL7lX67ZsrNmCP0nn0r8GBCXdX0&sid=fadae4b342cc6ff5&type=tcp#%F0%9F%87%AF%F0%9F%87%B5%20Japan
+vless://14c15a5c-deae-4d41-afac-2f1046bc71c7@multi.fresedvpn.site:62024?encryption=none&security=reality&sni=api-maps.yandex.ru&pbk=ISGeEtxbWkEaAjOcCL7lX67ZsrNmCP0nn0r8GBCXdX0&sid=1a643eadc75a0d3d&type=tcp#%F0%9F%87%BA%F0%9F%87%A6%20Ukraine
