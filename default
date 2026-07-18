@@ -1,3 +1,10 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
+vless://746463ec-cc00-403b-b0c9-92da24617686@at2.aerosafe.work:443?encryption=none&security=reality&sni=e6h547.workspacefiles.com&pbk=VMOOlLMwZ6gqFwuHWSmynLXJLf8fo-yyDXpbX55dvGg&sid=3df0beeb2523754b&spx=%2F&type=grpc#%F0%9F%87%A6%F0%9F%87%B9%20Austria
+vless://eea6bd98-3c4f-42ac-8bc1-7c0d542d2740@ee.cdn-global.pro:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ee.cdn-global.pro&pbk=RO5YMxxtJmZo2w370qG-seJ41toowHPbz6i2uXJ2gG0&sid=7a3f9e2b1c8d4f6a&spx=%2F&type=tcp#%F0%9F%87%AA%F0%9F%87%AA%20Estonia
+vless://746463ec-cc00-403b-b0c9-92da24617686@de1.aerosafe.work:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=adtn17.workspacefiles.com&pbk=MLvSF_3scDA_jPsfLJ_q7S0TxEbz_Z2-G9RsBAVMsRs&sid=361c806a0869aaef&spx=%2F&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany%201
+vless://eea6bd98-3c4f-42ac-8bc1-7c0d542d2740@ru9.cdn-global.pro:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ru9.cdn-global.pro&pbk=VzcHDR57dKZ6aPF1VchAbeKfSHKt_a4pjt-eOpoAG0o&sid=893c5832052a1923&spx=%2F&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany%202
+vless://eea6bd98-3c4f-42ac-8bc1-7c0d542d2740@103.20.235.34:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=sg.cdn-global.pro&pbk=P9y7nYNPsgku4dLPbIspNTldM4U3QG8e2M84FcxuYHs&sid=7a3f9e2b1c8d4f6a&spx=%2F&type=tcp#%F0%9F%87%B8%F0%9F%87%AC%20Singapore
+vless://746463ec-cc00-403b-b0c9-92da24617686@nl3.aerosafe.work:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=9dqybl.workspacefiles.com&pbk=gxIyGzfvsbaoIA6c3mVSQElFloOPqKl0ohi2XWx08jQ&sid=c8b370aedac56203&spx=%2F&type=tcp#%F0%9F%87%B3%F0%9F%87%B1%20The%20Netherlands
+vless://746463ec-cc00-403b-b0c9-92da24617686@us1.aerosafe.work:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=y8coh6.workspacefiles.com&pbk=AYyE5oWqNHxKXtiUwwRZmoM3aY8sr9VUKMDl7HwrqQY&sid=c9f0b218e5b13742&spx=%2F&type=tcp#%F0%9F%87%BA%F0%9F%87%B8%20United%20States
