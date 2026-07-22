@@ -1,3 +1,6 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
+vless://746463ec-cc00-403b-b0c9-92da24617686@at1.aerosafe.work:443?encryption=none&security=reality&sni=e6h547.workspacefiles.com&pbk=VMOOlLMwZ6gqFwuHWSmynLXJLf8fo-yyDXpbX55dvGg&sid=0236c20991aa5e68&spx=%2F&type=grpc&fp=firefox#%F0%9F%87%A6%F0%9F%87%B9%20Austria
+vless://746463ec-cc00-403b-b0c9-92da24617686@de5.aerosafe.work:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=adtn17.workspacefiles.com&pbk=MLvSF_3scDA_jPsfLJ_q7S0TxEbz_Z2-G9RsBAVMsRs&sid=6ba8da838e34a6af&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%A9%F0%9F%87%AA%20Germany
+vless://746463ec-cc00-403b-b0c9-92da24617686@us1.aerosafe.work:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=y8coh6.workspacefiles.com&pbk=AYyE5oWqNHxKXtiUwwRZmoM3aY8sr9VUKMDl7HwrqQY&sid=32ceae6ef4e0e163&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%BA%F0%9F%87%B8%20United%20States
