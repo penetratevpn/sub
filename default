@@ -1,3 +1,18 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@cz.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=cz.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%BF%20Czechia
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@est2.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=est2.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AA%F0%9F%87%AA%20Estonia
+vless://6d5e5681-6499-40a4-bc66-05ee57d5dab0@fishsea.api.dznn.net:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=fishsea.api.dznn.net&pbk=9F7JxyyP-TNLt0dY2xOB0_34I8W0xXIpFY7rZ7-L0Gg&sid=0a6ba2716a409da6&type=tcp&fp=firefox#%F0%9F%87%AB%F0%9F%87%AE%20Finland
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@zz26.tgnn.live:443?security=tls&alpn=http%2F1.1&sni=zz26.tgnn.live&fp=firefox&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany
+vless://8007ac24-ed36-4dc0-884f-0835bb9238fd@kz.pubconverter.com:8443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=kz.pubconverter.com&pbk=-yJaCCGsucUDEnTTn6VJJyF0R5ZLlJAVNeIXFJYSGn8&sid=361c68748712c743&type=tcp&fp=firefox#%F0%9F%87%B0%F0%9F%87%BF%20Kazakhstan
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@pl1.nngo.cc:443?security=tls&alpn=http%2F1.1&sni=pl1.nngo.cc&fp=firefox&type=tcp#%F0%9F%87%B5%F0%9F%87%B1%20Poland%201
+vless://f637fc68-f3c4-4f0b-8471-ab6efa1f5cd6@91.185.83.63:443?encryption=none&flow=xtls-rprx-vision&security=tls&alpn=http%2F1.1&sni=z.nnmm.me&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland%202
+vless://6d5e5681-6499-40a4-bc66-05ee57d5dab0@rune.api.dznn.net:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=eh.vk.com&pbk=9F7JxyyP-TNLt0dY2xOB0_34I8W0xXIpFY7rZ7-L0Gg&sid=0a6ba2716a409da6&type=tcp&fp=firefox#%F0%9F%87%B7%F0%9F%87%BA%20Russia
+vless://8007ac24-ed36-4dc0-884f-0835bb9238fd@185.213.24.36:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=scandinavia.koexp.ru&pbk=-yJaCCGsucUDEnTTn6VJJyF0R5ZLlJAVNeIXFJYSGn8&sid=361c68748712c743&type=tcp&fp=firefox#%F0%9F%87%B8%F0%9F%87%AA%20Sweden%201
+vless://8007ac24-ed36-4dc0-884f-0835bb9238fd@scandinavia.koexp.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=scandinavia.koexp.ru&pbk=-yJaCCGsucUDEnTTn6VJJyF0R5ZLlJAVNeIXFJYSGn8&sid=361c68748712c743&type=tcp&fp=firefox#%F0%9F%87%B8%F0%9F%87%AA%20Sweden%202
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@tur2.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=tur2.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B9%F0%9F%87%B7%20T%C3%BCrkiye
+vless://6d5e5681-6499-40a4-bc66-05ee57d5dab0@mynl.api.dznn.net:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=mynl.api.dznn.net&pbk=9F7JxyyP-TNLt0dY2xOB0_34I8W0xXIpFY7rZ7-L0Gg&sid=19aa22f681923dc8&type=tcp&fp=firefox#%F0%9F%87%A6%F0%9F%87%AA%20United%20Arab%20Emirates
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@uk1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=uk1.nnmm.me&fp=qq&type=tcp#%F0%9F%87%AC%F0%9F%87%A7%20United%20Kingdom
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@us.nnmm.me:443?security=tls&alpn=h2%2Chttp%2F1.1&sni=us.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%BA%F0%9F%87%B8%20United%20States%201
+vless://6d5e5681-6499-40a4-bc66-05ee57d5dab0@ussun.api.dznn.net:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ussun.api.dznn.net&pbk=9F7JxyyP-TNLt0dY2xOB0_34I8W0xXIpFY7rZ7-L0Gg&sid=0a6ba2716a409da6&type=tcp&fp=firefox#%F0%9F%87%BA%F0%9F%87%B8%20United%20States%202
