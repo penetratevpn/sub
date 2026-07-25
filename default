@@ -1,6 +1,3 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@ee1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=ee1.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%AA%F0%9F%87%AA%20Estonia
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@fr.nnmm.me:443?security=tls&alpn=h2%2Chttp%2F1.1&sni=fr.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%AB%F0%9F%87%B7%20France
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@ja.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=ja.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%AF%F0%9F%87%B5%20Japan
