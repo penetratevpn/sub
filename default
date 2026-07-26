@@ -1,18 +1,5 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@alban.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=alban.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%A6%F0%9F%87%B1%20Albania
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@bulg.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=bulg.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%A7%F0%9F%87%AC%20Bulgaria
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@germ.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=germ.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%BF%20Czechia
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@ee1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=ee1.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%AA%F0%9F%87%AA%20Estonia
-vless://6d5e5681-6499-40a4-bc66-05ee57d5dab0@dolores.api.dznn.net:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=dolores.api.dznn.net&pbk=9F7JxyyP-TNLt0dY2xOB0_34I8W0xXIpFY7rZ7-L0Gg&sid=19aa22f681923dc8&type=tcp&fp=firefox#%F0%9F%87%A9%F0%9F%87%AA%20Germany%201
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@de5.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=de5.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany%202
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@de3.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=de3.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany%203
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@176.109.87.102:443?security=tls&alpn=http%2F1.1&sni=zz27.tgnn.live&fp=qq&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany%204
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@pol3.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=pol3.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland%201
-vless://f637fc68-f3c4-4f0b-8471-ab6efa1f5cd6@91.185.83.63:443?encryption=none&flow=xtls-rprx-vision&security=tls&alpn=http%2F1.1&sni=z.nnmm.me&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland%202
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@mold.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=mold.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B7%F0%9F%87%B4%20Romania
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@ru1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=ru1.nnmm.me&fp=chrome&type=tcp#%F0%9F%87%B7%F0%9F%87%BA%20Russia
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@sp.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=sp.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AA%F0%9F%87%B8%20Spain
-vless://6d5e5681-6499-40a4-bc66-05ee57d5dab0@us-in.api.dznn.net:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=us-in.api.dznn.net&pbk=9F7JxyyP-TNLt0dY2xOB0_34I8W0xXIpFY7rZ7-L0Gg&sid=19aa22f681923dc8&type=tcp&fp=firefox#%F0%9F%87%BA%F0%9F%87%B8%20United%20States%201
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@tur.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=tur.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%BA%F0%9F%87%B8%20United%20States%202
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@no.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=no.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%B3%F0%9F%87%B4%20Norway
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@nl2.nnmm.me:443?security=tls&alpn=h2%2Chttp%2F1.1&sni=nl2.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%B3%F0%9F%87%B1%20The%20Netherlands
