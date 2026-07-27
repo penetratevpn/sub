@@ -19,7 +19,7 @@ jobs:
       SUBS_SECRET: ${{ secrets.VPN_SUBS }}
       HWID_SECRET: ${{ secrets.VPN_HWID }}
       XRAY_VERSION: '1.8.24'
-      THREADS: '24'
+      THREADS: '4'
       TIMEOUT: '8'
       REMARK_FORMAT: '{flag} {country}{index_suffix}'
       REMARK_LANGUAGE: 'en'
