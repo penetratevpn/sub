@@ -1,4 +1,10 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@176.109.87.102:443?security=tls&alpn=http%2F1.1&sni=zz27.tgnn.live&fp=qq&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@jap.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=jap.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AF%F0%9F%87%B5%20Japan
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@kz.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=kz.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B0%F0%9F%87%BF%20Kazakhstan
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@lat.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=lat.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B1%F0%9F%87%BB%20Latvia
+vless://f637fc68-f3c4-4f0b-8471-ab6efa1f5cd6@91.185.83.63:443?encryption=none&flow=xtls-rprx-vision&security=tls&alpn=http%2F1.1&sni=z.nnmm.me&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@sw1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=sw1.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@tur2.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=tur2.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B9%F0%9F%87%B7%20T%C3%BCrkiye
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@uk1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=uk1.nnmm.me&fp=qq&type=tcp#%F0%9F%87%AC%F0%9F%87%A7%20United%20Kingdom
