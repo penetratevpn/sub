@@ -1,11 +1,9 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@ee1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=ee1.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%AA%F0%9F%87%AA%20Estonia
 trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@fr.nnmm.me:443?security=tls&alpn=h2%2Chttp%2F1.1&sni=fr.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%AB%F0%9F%87%B7%20France
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@ja.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=ja.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%AF%F0%9F%87%B5%20Japan
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@no.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=no.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%B3%F0%9F%87%B4%20Norway
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@pl1.nngo.cc:443?security=tls&alpn=http%2F1.1&sni=pl1.nngo.cc&fp=firefox&type=tcp#%F0%9F%87%B5%F0%9F%87%B1%20Poland
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@ru1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=ru1.nnmm.me&fp=chrome&type=tcp#%F0%9F%87%B7%F0%9F%87%BA%20Russia
-trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@tu1.nnmm.me:443?security=tls&alpn=http%2F1.1&sni=tu1.nnmm.me&fp=firefox&type=tcp#%F0%9F%87%B9%F0%9F%87%B7%20T%C3%BCrkiye
-vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@ang.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ang.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AC%F0%9F%87%A7%20United%20Kingdom
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@zz21.tgnn.live:443?security=tls&alpn=http%2F1.1&sni=zz21.tgnn.live&fp=firefox&type=tcp#%F0%9F%87%A9%F0%9F%87%AA%20Germany
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@gr.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=gr.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AC%F0%9F%87%B7%20Greece
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@lit.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=lit.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B1%F0%9F%87%B9%20Lithuania
+trojan://h_UPcU6ZCHGA064m9D913dB9AUQJ6A5V@46.8.209.223:443?security=tls&alpn=http%2F1.1&sni=zz.tgnn.live&fp=qq&type=tcp#%F0%9F%87%B7%F0%9F%87%BA%20Russia
+vless://6d44422b-686b-49fa-82c8-8ff45b2b42f5@amer.freeinternat.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=amer.freeinternat.com&pbk=bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk&sid=ff776ff77be48b88&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%B9%F0%9F%87%B7%20T%C3%BCrkiye
