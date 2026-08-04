@@ -1,13 +1,4 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@ru56.whost-solutions.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ru.whost-solutions.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%AB%F0%9F%87%AE%20Finland
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@ru72.whost-solutions.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ru21.whost-solutions.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%B8%F0%9F%87%AA%20Sweden
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@lv01.tranzit-net.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=d.tranzit-net.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%201
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@nl15.tranzit-net.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=d.tranzit-net.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%202
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@de48.tranzit-net.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=d.tranzit-net.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%203
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@lv02.tranzit-net.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=d.tranzit-net.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%204
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@ru55.whost-solutions.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ru21.whost-solutions.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%205
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@ru50.whost-solutions.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ru21.whost-solutions.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%206
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@ru67.whost-solutions.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ru21.whost-solutions.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%207
-vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@ru58.whost-solutions.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ru.whost-solutions.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%A8%F0%9F%87%AD%20Switzerland%208
+vless://d25ec567-bc58-4f1d-aba9-9cda60bfb2cd@lv03.tranzit-net.ru:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=d.tranzit-net.ru&pbk=IAdOYYmEMPFAhpVUhqfML58AVtYPdAb71R_HAPf0N0k&type=tcp&fp=firefox#%F0%9F%87%B7%F0%9F%87%BA%20Russia
