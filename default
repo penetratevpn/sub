@@ -1,9 +1,4 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-trojan://pXnM9tzg_hLW3WY7VVtVGqAVo2JK_Zdk@krasnodar.gosgenarchive.com:448?type=grpc&serviceName=TrojanGRPC&mode=gun&authority=krasnodar.gosgenarchive.com&security=tls&sni=krasnodar.gosgenarchive.com&fp=chrome&alpn=h2#%F0%9F%87%AB%F0%9F%87%AE%20Finland
-vless://caf70841-d7c1-40ee-adb2-ea1cd7f571cb@176.53.175.0:448?encryption=none&type=grpc&serviceName=xyz&mode=gun&security=reality&sni=eh.vk.ru&pbk=wSQIBnAc0cYO9JitaNcgZ2LwkTix0_dXVpDjnZxDrCE&fp=firefox#%F0%9F%87%AC%F0%9F%87%AA%20Georgia
-vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@80.68.156.109:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=rucdn.protectednetwork.shop&pbk=qQ5v62tCMmdAXvcrfWj9e4pm732FGnWnjTomgwBYXwU&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland
-vless://b798d88b-6b11-4c6f-bd08-957bb8c0e726@ru-1.node.cis-game.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=store.ru-game.app&pbk=3KYP4RMn23lihhNY9pCGBae5Po43ekj5nmsJ8SP3VyY&sid=dc98bf118a39b6eb&type=tcp&fp=firefox#%F0%9F%87%B7%F0%9F%87%BA%20Russia
-vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@swnode.protectednetwork.shop:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=swcdn.protectednetwork.shop&pbk=Tma7pXEElzyBz96kUs8brepcfzvg4acNBxkXfQn1oTo&type=tcp&fp=firefox#%F0%9F%87%B8%F0%9F%87%AA%20Sweden%201
-trojan://pXnM9tzg_hLW3WY7VVtVGqAVo2JK_Zdk@ulyanovsk.gosgenarchive.com:448?type=grpc&serviceName=TrojanGRPC&mode=gun&authority=ulyanovsk.gosgenarchive.com&security=tls&sni=ulyanovsk.gosgenarchive.com&fp=chrome&alpn=h2#%F0%9F%87%B8%F0%9F%87%AA%20Sweden%202
+vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@swnode.protectednetwork.shop:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=swcdn.protectednetwork.shop&pbk=Tma7pXEElzyBz96kUs8brepcfzvg4acNBxkXfQn1oTo&type=tcp&fp=firefox#%F0%9F%87%B8%F0%9F%87%AA%20Sweden
