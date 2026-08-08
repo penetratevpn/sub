@@ -1,3 +1,6 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
+vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@finode.protectednetwork.shop:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ficdn.protectednetwork.shop&pbk=Tma7pXEElzyBz96kUs8brepcfzvg4acNBxkXfQn1oTo&type=tcp&fp=firefox#%F0%9F%87%AB%F0%9F%87%AE%20Finland%201
+trojan://pXnM9tzg_hLW3WY7VVtVGqAVo2JK_Zdk@saratov.gosgenarchive.com:448?type=grpc&serviceName=TrojanGRPC&mode=gun&authority=saratov.gosgenarchive.com&security=tls&sni=saratov.gosgenarchive.com&fp=chrome&alpn=h2#%F0%9F%87%AB%F0%9F%87%AE%20Finland%202
+vless://b798d88b-6b11-4c6f-bd08-957bb8c0e726@node.s3.nl.cis-game.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=s3.nl.cis-game.com&pbk=XxfTioQEcH6sRraUpFSkV9KEI9eKJtxh1bMvqZsmhEI&sid=698b9dc368ef510b&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B9%20Portugal
