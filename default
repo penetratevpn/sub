@@ -1,3 +1,7 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
+vless://12c340b0-4d50-4635-882a-bac995b80b56@ru01.sipipro.su:443?encryption=none&security=reality&sni=ru01.sipipro.su&pbk=b40zzVHzeEgwLfCeccP5BYlejfECs-3sP_otqc556Qc&sid=3c13d14e020f9d58&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AB%F0%9F%87%B7%20France
+vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@jpnode.protectednetwork.shop:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=www.mysql.com&pbk=Tma7pXEElzyBz96kUs8brepcfzvg4acNBxkXfQn1oTo&sid=1234567890abcdef&type=tcp&fp=firefox#%F0%9F%87%AD%F0%9F%87%B0%20Hong%20Kong
+vless://b798d88b-6b11-4c6f-bd08-957bb8c0e726@node.s3.nl.cis-game.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=s3.nl.cis-game.com&pbk=XxfTioQEcH6sRraUpFSkV9KEI9eKJtxh1bMvqZsmhEI&sid=698b9dc368ef510b&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B9%20Portugal%201
+vless://b798d88b-6b11-0067-bd08-957bb8c0e726@ru-2.node.cis-game.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=rutube.ru&pbk=3KYP4RMn23lihhNY9pCGBae5Po43ekj5nmsJ8SP3VyY&sid=dc98bf118a39b6eb&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B9%20Portugal%202
