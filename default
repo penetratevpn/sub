@@ -1,9 +1,6 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-trojan://pXnM9tzg_hLW3WY7VVtVGqAVo2JK_Zdk@ulanude.gosgenarchive.com:448?type=grpc&serviceName=TrojanGRPC&mode=gun&authority=ulanude.gosgenarchive.com&security=tls&sni=ulanude.gosgenarchive.com&fp=chrome&alpn=h2#%F0%9F%87%A7%F0%9F%87%BE%20Belarus
-vless://479a25af-93bd-4d1a-a663-f09067fa24fe@tg.game-app.net:443?encryption=none&security=reality&sni=lbhrb3.workspacefiles.com&pbk=tJ8b5T0jj2mk8gYp99dhJY-avfHWVzNY3LcYzR3MDEQ&sid=c59cce43168885fa&spx=%2F&type=grpc&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland
-vless://b798d88b-6b11-0067-bd08-957bb8c0e726@ru-2.node.cis-game.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=rutube.ru&pbk=3KYP4RMn23lihhNY9pCGBae5Po43ekj5nmsJ8SP3VyY&sid=dc98bf118a39b6eb&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B9%20Portugal%201
-vless://b798d88b-6b11-4c6f-bd08-957bb8c0e726@node.s3.nl.cis-game.com:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=s3.nl.cis-game.com&pbk=XxfTioQEcH6sRraUpFSkV9KEI9eKJtxh1bMvqZsmhEI&sid=698b9dc368ef510b&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B9%20Portugal%202
+vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@finode.protectednetwork.shop:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ficdn.protectednetwork.shop&pbk=Tma7pXEElzyBz96kUs8brepcfzvg4acNBxkXfQn1oTo&type=tcp&fp=firefox#%F0%9F%87%AB%F0%9F%87%AE%20Finland
+vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@80.68.156.109:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=rucdn.protectednetwork.shop&pbk=qQ5v62tCMmdAXvcrfWj9e4pm732FGnWnjTomgwBYXwU&type=tcp&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland
 vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@swnode.protectednetwork.shop:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=swcdn.protectednetwork.shop&pbk=Tma7pXEElzyBz96kUs8brepcfzvg4acNBxkXfQn1oTo&type=tcp&fp=firefox#%F0%9F%87%B8%F0%9F%87%AA%20Sweden
-vless://7fc2a09c-b6b2-477e-9678-89c5c60fcf0c@176.108.241.176:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=trcdn.protectednetwork.shop&pbk=Tma7pXEElzyBz96kUs8brepcfzvg4acNBxkXfQn1oTo&type=tcp&fp=firefox#%F0%9F%87%B9%F0%9F%87%B7%20T%C3%BCrkiye
