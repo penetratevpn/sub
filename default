@@ -1,5 +1,5 @@
 #profile-title: penetrate
 #profile-web-page-url: https://penetratevpn.github.io
 #announce: Telegram: @penetratevpn
-vless://12c340b0-4d50-4635-882a-bac995b80b56@ru09.sipipro.su:443?encryption=none&security=reality&sni=ru09.sipipro.su&pbk=FYXYSQ52-_Fi8fCCkHk8e0qGTrFIYV8SBqTdLmH3jyQ&sid=233a26340816e42d&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AB%F0%9F%87%B7%20France
-vless://caf70841-d7c1-40ee-adb2-ea1cd7f571cb@95.85.254.50:443?encryption=none&type=grpc&mode=gun&security=reality&sni=stats.vk-portal.net&pbk=YD5WWrYv-qy2P6Hu9dtImndERQBhf9uC928NigPOIjg&fp=firefox#%F0%9F%87%B5%F0%9F%87%B1%20Poland
+vless://12c340b0-4d50-4635-882a-bac995b80b56@ru05.sipi.pro:443?encryption=none&security=reality&sni=ru05.sipi.pro&pbk=zpaxuUFSoBbKEdPIWUDRgv4lt5MSIqRQ9y7Wb0rS_l4&sid=fed54d7878054cc1&spx=%2F&type=tcp&fp=firefox#%F0%9F%87%AB%F0%9F%87%B7%20France
+vless://caf70841-d7c1-40ee-adb2-ea1cd7f571cb@45.139.27.245:9443?encryption=none&type=grpc&serviceName=xyz&mode=gun&security=reality&sni=eh.vk.ru&pbk=wSQIBnAc0cYO9JitaNcgZ2LwkTix0_dXVpDjnZxDrCE&fp=firefox#%F0%9F%87%AC%F0%9F%87%A7%20United%20Kingdom
