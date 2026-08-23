@@ -22,7 +22,7 @@ jobs:
       THREADS: '4'
       TIMEOUT: '8'
       REMARK_FORMAT: '{flag} {country}{index_suffix}'
-      REMARK_LANGUAGE: 'en'
+      REMARK_LANGUAGE: 'ru'
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -85,76 +85,36 @@ jobs:
       - name: Replace Chrome fingerprints with Firefox
         run: |
           python - <<'PY'
-          import re
-          from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
-          
+          import urllib.parse
+
           def replace_fingerprint(line):
-              """Replace chrome fingerprint with firefox in VLESS URLs"""
-              # Only process VLESS URLs
+              line = line.rstrip('\n\r')
               if not line.startswith('vless://'):
-                  return line
-              
+                  return line + '\n'
               try:
-                  # Parse the URL
-                  parts = urlparse(line.strip())
-                  
-                  # If no query parameters, add fp=firefox
-                  if not parts.query:
-                      return line.rstrip() + '?fp=firefox\n'
-                  
-                  # Parse query parameters
-                  params = parse_qs(parts.query, keep_blank_values=True)
-                  
-                  # Remove any existing fp parameter
-                  params.pop('fp', None)
-                  
-                  # Add fp=firefox
+                  parsed = urllib.parse.urlparse(line)
+                  params = urllib.parse.parse_qs(parsed.query, keep_blank_values=True)
                   params['fp'] = ['firefox']
-                  
-                  # Rebuild query string
-                  new_query = urlencode(params, doseq=True)
-                  
-                  # Rebuild the URL
-                  new_parts = list(parts)
-                  new_parts[4] = new_query  # Index 4 is query string
-                  
-                  # Return with newline
-                  return urlunparse(new_parts) + '\n'
-                  
-              except Exception as e:
-                  print(f"Warning: Could not parse line: {line[:100]}... Error: {e}")
-                  return line
-          
-          # Read the file
+                  new_query = urllib.parse.urlencode(params, doseq=True)
+                  new_parsed = parsed._replace(query=new_query)
+                  return urllib.parse.urlunparse(new_parsed) + '\n'
+              except Exception:
+                  return line + '\n'
+
           try:
-              with open('default', 'r') as f:
+              with open('default', 'r', encoding='utf-8') as f:
                   lines = f.readlines()
           except FileNotFoundError:
-              print("default file not found, skipping fingerprint replacement")
               exit(0)
-          
-          if not lines:
-              print("default file is empty, skipping fingerprint replacement")
-              exit(0)
-          
-          # Process each line
+
           processed_lines = [replace_fingerprint(line) for line in lines]
           
-          # Count changes
-          original_content = ''.join(lines)
-          new_content = ''.join(processed_lines)
-          
-          if original_content != new_content:
-              # Write back
-              with open('default', 'w') as f:
-                  f.writelines(processed_lines)
-              
-              # Count how many lines were modified
-              modified = sum(1 for i, line in enumerate(lines) if line != processed_lines[i])
-              print(f"✅ Replaced Chrome fingerprints with Firefox in {modified} VLESS URLs")
-          else:
-              print("ℹ️ No changes needed - all VLESS URLs already have Firefox fingerprints")
-          
+          with open('default', 'w', encoding='utf-8') as f:
+              f.writelines(processed_lines)
+
+          modified = sum(1 for i in range(len(lines)) if lines[i] != processed_lines[i])
+          if modified > 0:
+              print(f"Replaced fingerprints in {modified} VLESS URLs")
           PY
 
       - name: Commit updated default
@@ -166,5 +126,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add default
-          git commit -m 'chore: refresh default subscriptions with Firefox fingerprints'
+          git commit -m 'chore: refresh default subscriptions'
           git push
