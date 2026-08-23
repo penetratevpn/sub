@@ -34,6 +34,11 @@ COUNTRY_REPLACEMENTS = {
     }
 }
 HEADER_PREFIXES = ("#profile-", "#announce:")
+UNSTABLE_HEADER_LINES = [
+    "#profile-title: penetrate unstable",
+    "#profile-web-page-url: https://penetratevpn.github.io",
+    "#announce: Telegram: @penetratevpn (current sub: unstable)",
+]
 
 
 @dataclass(frozen=True)
@@ -832,31 +837,53 @@ def resolve_uri_geo(uri: str, geoip_path: Path, remark_language: str) -> tuple[s
     return "UN", "Unknown", ip or ""
 
 
-def format_results(results: list[CheckResult], remark_format: str, is_working: bool) -> list[str]:
-    output: list[str] = []
-    sorted_results = sorted(results, key=lambda r: (r.country_name, r.latency_ms))
+def _remark_values(item: CheckResult, index: int, total: int) -> dict:
+    return {
+        "flag": get_unicode_flag(item.country_code),
+        "country": item.country_name,
+        "index": str(index),
+        "index_suffix": f" {index}" if total > 1 else "",
+        "old": item.old_remark,
+        "protocol": item.protocol.upper(),
+        "latency_ms": str(item.latency_ms),
+        "ip": item.real_ip,
+    }
 
-    for index, item in enumerate(sorted_results, start=1):
-        parsed = urllib.parse.urlparse(item.uri)
-        values = {
-            "flag": get_unicode_flag(item.country_code),
-            "country": item.country_name,
-            "index": str(index),
-            "index_suffix": f" {index}" if len(sorted_results) > 1 else "",
-            "old": item.old_remark,
-            "protocol": item.protocol.upper(),
-            "latency_ms": str(item.latency_ms),
-            "ip": item.real_ip,
-        }
-        if is_working:
+
+def format_results(results: list[CheckResult], remark_format: str, is_working: bool) -> list[str]:
+    if is_working:
+        sorted_results = sorted(results, key=lambda r: (r.country_name, r.latency_ms))
+        output: list[str] = []
+        for index, item in enumerate(sorted_results, start=1):
+            parsed = urllib.parse.urlparse(item.uri)
+            values = _remark_values(item, index, len(sorted_results))
             remark = f"✅ {remark_format.format(**values)}".strip()
-        elif item.country_code != "UN":
-            # we managed to resolve/geoip the server address even though the
-            # live check failed - still worth showing where it is
-            remark = f"❌ {remark_format.format(**values)}".strip()
-        else:
-            remark = item.old_remark or "Failed"
+            output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
+        return output
+
+    # unstable file: entries we managed to geo-resolve (know the real
+    # server location even though the live check failed) get a ✅ and are
+    # placed first, in their own country-sorted block, no matter what
+    # index they'd otherwise land on. Everything we couldn't resolve at
+    # all goes after, completely undecorated - no ❌, no "Failed", just
+    # whatever remark it already had (or nothing).
+    resolved = [r for r in results if r.country_code != "UN"]
+    unresolved = [r for r in results if r.country_code == "UN"]
+    resolved_sorted = sorted(resolved, key=lambda r: r.country_name)
+
+    output = []
+    for index, item in enumerate(resolved_sorted, start=1):
+        parsed = urllib.parse.urlparse(item.uri)
+        values = _remark_values(item, index, len(resolved_sorted))
+        remark = f"✅ {remark_format.format(**values)}".strip()
         output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
+
+    for item in unresolved:
+        parsed = urllib.parse.urlparse(item.uri)
+        remark = item.old_remark
+        fragment = urllib.parse.quote(remark) if remark else ""
+        output.append(urllib.parse.urlunparse(parsed._replace(fragment=fragment)))
+
     return output
 
 
@@ -973,13 +1000,12 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
     working_links = format_results(working_results, remark_format, is_working=True)
     write_default_file(default_path, headers, working_links)
 
-    if unstable_path.exists():
-        unstable_headers, _ = split_default_file(unstable_path)
-        failed_links = format_results(failed_results, remark_format, is_working=False)
-        write_default_file(unstable_path, unstable_headers, failed_links)
-        print(f"Done: wrote {len(working_links)} working links to {default_path} and {len(failed_links)} failed links to {unstable_path}")
-    else:
-        print(f"Done: wrote {len(working_links)} working links to {default_path} (unstable file not found, failed links discarded)")
+    unstable_headers, _ = split_default_file(unstable_path) if unstable_path.exists() else ([], [])
+    if not unstable_headers:
+        unstable_headers = UNSTABLE_HEADER_LINES
+    failed_links = format_results(failed_results, remark_format, is_working=False)
+    write_default_file(unstable_path, unstable_headers, failed_links)
+    print(f"Done: wrote {len(working_links)} working links to {default_path} and {len(failed_links)} failed links to {unstable_path}")
 
     return 0
 
