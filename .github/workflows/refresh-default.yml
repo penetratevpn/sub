@@ -117,14 +117,27 @@ jobs:
               print(f"Replaced fingerprints in {modified} VLESS URLs")
           PY
 
-      - name: Commit updated default
+      - name: Commit updated files
         run: |
-          if git diff --quiet -- default; then
-            echo 'No changes to commit'
-            exit 0
-          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add default
-          git commit -m 'chore: refresh default subscriptions'
-          git push
+          
+          # Add default file if changed
+          if ! git diff --quiet -- default; then
+            git add default
+            echo "default_changed=true" >> $GITHUB_ENV
+          fi
+          
+          # Add unstable file if changed
+          if ! git diff --quiet -- unstable; then
+            git add unstable
+            echo "unstable_changed=true" >> $GITHUB_ENV
+          fi
+          
+          # Commit if any files changed
+          if [ "${{ env.default_changed }}" = "true" ] || [ "${{ env.unstable_changed }}" = "true" ]; then
+            git commit -m 'chore: refresh default and unstable subscriptions'
+            git push
+          else
+            echo 'No changes to commit'
+          fi
