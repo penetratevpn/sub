@@ -556,66 +556,59 @@ def normalize_transport(transport: str) -> str:
     return aliases.get(transport.lower(), transport.lower())
 
 
-def build_stream_settings(query: dict[str, list[str]], server_host: str) -> dict:
-    transport = query.get("type", ["tcp"])[0] or "tcp"
-    transport = normalize_transport(transport)
+def build_singbox_tls(query: dict[str, list[str]], server_host: str) -> dict | None:
+    """sing-box TLS object shared by vless/vmess/trojan outbounds."""
     security = query.get("security", ["none"])[0] or "none"
+    if security not in {"tls", "reality"}:
+        return None
     sni = query.get("sni", [server_host])[0] or server_host
     fingerprint = query.get("fp", ["chrome"])[0] or "chrome"
 
-    stream = {"network": transport, "security": security}
-    if security == "tls":
-        stream["tlsSettings"] = {"serverName": sni, "fingerprint": fingerprint}
-        if query.get("allowInsecure"):
-            stream["tlsSettings"]["allowInsecure"] = query["allowInsecure"][0] in {"1", "true", "True"}
-        if query.get("alpn"):
-            stream["tlsSettings"]["alpn"] = query["alpn"][0].split(",")
-    elif security == "reality":
-        stream["realitySettings"] = {
-            "serverName": sni,
-            "fingerprint": fingerprint,
-            "publicKey": query.get("pbk", [""])[0],
-            "shortId": query.get("sid", [""])[0],
-            "spiderX": query.get("spx", [""])[0],
+    tls: dict = {"enabled": True, "server_name": sni}
+    if query.get("allowInsecure"):
+        tls["insecure"] = query["allowInsecure"][0] in {"1", "true", "True"}
+    if query.get("alpn"):
+        tls["alpn"] = query["alpn"][0].split(",")
+    if fingerprint:
+        tls["utls"] = {"enabled": True, "fingerprint": fingerprint}
+    if security == "reality":
+        tls["reality"] = {
+            "enabled": True,
+            "public_key": query.get("pbk", [""])[0],
+            "short_id": query.get("sid", [""])[0],
         }
+    return tls
 
+
+def build_singbox_transport(query: dict[str, list[str]], server_host: str) -> dict | None:
+    """sing-box V2Ray-transport object. Returns None for plain tcp."""
+    transport = normalize_transport(query.get("type", ["tcp"])[0] or "tcp")
+    if transport in {"tcp", ""}:
+        return None
     if transport == "ws":
-        stream["wsSettings"] = {
+        return {
+            "type": "ws",
             "path": query.get("path", ["/"])[0] or "/",
             "headers": {"Host": query.get("host", [server_host])[0] or server_host},
         }
-    elif transport == "grpc":
-        stream["grpcSettings"] = {
-            "serviceName": query.get("serviceName", [""])[0],
-            "multiMode": query.get("mode", [""])[0] == "multi",
-        }
-    elif transport == "xhttp":
-        stream["xhttpSettings"] = {
-            "path": query.get("path", ["/"])[0] or "/",
-            "host": query.get("host", [server_host])[0] or server_host,
-            "mode": query.get("mode", ["auto"])[0] or "auto",
-        }
-    elif transport == "httpupgrade":
-        stream["httpupgradeSettings"] = {
+    if transport == "grpc":
+        return {"type": "grpc", "service_name": query.get("serviceName", [""])[0]}
+    if transport == "httpupgrade":
+        return {
+            "type": "httpupgrade",
             "path": query.get("path", ["/"])[0] or "/",
             "host": query.get("host", [server_host])[0] or server_host,
         }
-    elif transport == "hysteria":
-        stream["hysteriaSettings"] = {
-            "version": 2,
-            "auth": query.get("auth", [""])[0],
-            "udpIdleTimeout": int(query.get("udpIdleTimeout", ["60"])[0] or 60),
+    if transport == "http":
+        return {
+            "type": "http",
+            "path": query.get("path", ["/"])[0] or "/",
+            "host": [query.get("host", [server_host])[0] or server_host],
         }
-    elif transport == "tcp" and query.get("headerType", ["none"])[0] == "http":
-        host = query.get("host", [server_host])[0] or server_host
-        path = query.get("path", ["/"])[0] or "/"
-        stream["tcpSettings"] = {
-            "header": {
-                "type": "http",
-                "request": {"path": [path], "headers": {"Host": [host]}},
-            }
-        }
-    return stream
+    # xhttp/splithttp and the legacy tcp+http-header camouflage don't have a
+    # matching sing-box transport - these links will fail the live check and
+    # fall through to the unstable file (with DNS+geoip still attempted).
+    raise ValueError(f"sing-box: unsupported transport '{transport}'")
 
 
 def generate_vless_outbound(parsed: urllib.parse.ParseResult) -> dict:
@@ -625,21 +618,23 @@ def generate_vless_outbound(parsed: urllib.parse.ParseResult) -> dict:
     if not user_id or not server_host:
         raise ValueError("invalid VLESS URI: missing user id or host")
     query = urllib.parse.parse_qs(parsed.query)
-    return {
-        "protocol": "vless",
-        "settings": {
-            "vnext": [{
-                "address": server_host,
-                "port": server_port,
-                "users": [{
-                    "id": user_id,
-                    "encryption": query.get("encryption", ["none"])[0] or "none",
-                    "flow": query.get("flow", [""])[0],
-                }],
-            }]
-        },
-        "streamSettings": build_stream_settings(query, server_host),
+    outbound: dict = {
+        "type": "vless",
+        "tag": "proxy",
+        "server": server_host,
+        "server_port": server_port,
+        "uuid": user_id,
     }
+    flow = query.get("flow", [""])[0]
+    if flow:
+        outbound["flow"] = flow
+    tls = build_singbox_tls(query, server_host)
+    if tls:
+        outbound["tls"] = tls
+    transport = build_singbox_transport(query, server_host)
+    if transport:
+        outbound["transport"] = transport
+    return outbound
 
 
 def generate_trojan_outbound(parsed: urllib.parse.ParseResult) -> dict:
@@ -649,11 +644,19 @@ def generate_trojan_outbound(parsed: urllib.parse.ParseResult) -> dict:
     if not password or not server_host:
         raise ValueError("invalid Trojan URI: missing password or host")
     query = urllib.parse.parse_qs(parsed.query)
-    return {
-        "protocol": "trojan",
-        "settings": {"servers": [{"address": server_host, "port": server_port, "password": password}]},
-        "streamSettings": build_stream_settings(query, server_host),
+    outbound: dict = {
+        "type": "trojan",
+        "tag": "proxy",
+        "server": server_host,
+        "server_port": server_port,
+        "password": password,
     }
+    tls = build_singbox_tls(query, server_host) or {"enabled": True, "server_name": server_host}
+    outbound["tls"] = tls
+    transport = build_singbox_transport(query, server_host)
+    if transport:
+        outbound["transport"] = transport
+    return outbound
 
 
 def parse_shadowsocks_userinfo(parsed: urllib.parse.ParseResult) -> tuple[str, str]:
@@ -674,8 +677,12 @@ def generate_shadowsocks_outbound(parsed: urllib.parse.ParseResult) -> dict:
     if not method or not password:
         raise ValueError("invalid Shadowsocks URI: missing method or password")
     return {
-        "protocol": "shadowsocks",
-        "settings": {"servers": [{"address": server_host, "port": server_port, "method": method, "password": password}]},
+        "type": "shadowsocks",
+        "tag": "proxy",
+        "server": server_host,
+        "server_port": server_port,
+        "method": method,
+        "password": password,
     }
 
 
@@ -695,49 +702,96 @@ def generate_vmess_outbound(uri: str) -> dict:
         "allowInsecure": [str(data.get("allowInsecure") or "")],
         "alpn": [data.get("alpn") or ""],
         "fp": [data.get("fp") or "chrome"],
-        "headerType": [data.get("headerType") or ""],
         "serviceName": [data.get("serviceName") or ""],
-        "mode": [data.get("mode") or ""],
     }
-    return {
-        "protocol": "vmess",
-        "settings": {"vnext": [{"address": server_host, "port": server_port, "users": [{"id": user_id, "alterId": int(data.get("aid") or 0), "security": data.get("scy") or data.get("security") or "auto"}]}]},
-        "streamSettings": build_stream_settings(query, server_host),
+    outbound: dict = {
+        "type": "vmess",
+        "tag": "proxy",
+        "server": server_host,
+        "server_port": server_port,
+        "uuid": user_id,
+        "security": data.get("scy") or data.get("security") or "auto",
+        "alter_id": int(data.get("aid") or 0),
     }
+    tls = build_singbox_tls(query, server_host)
+    if tls:
+        outbound["tls"] = tls
+    transport = build_singbox_transport(query, server_host)
+    if transport:
+        outbound["transport"] = transport
+    return outbound
 
 
-def generate_hysteria_outbound(parsed: urllib.parse.ParseResult) -> dict:
+def generate_hysteria2_outbound(parsed: urllib.parse.ParseResult) -> dict:
     password = urllib.parse.unquote(parsed.username or "")
     server_host = parsed.hostname
     server_port = parsed.port or 443
     if not password or not server_host:
-        raise ValueError("invalid Hysteria URI: missing password or host")
+        raise ValueError("invalid Hysteria2 URI: missing password or host")
     query = urllib.parse.parse_qs(parsed.query)
-    stream_query = {
-        "type": ["hysteria"],
-        "security": [query.get("security", ["tls"])[0] or "tls"],
-        "sni": [query.get("sni", [server_host])[0] or server_host],
-        "auth": [password],
-        "udpIdleTimeout": [query.get("udpIdleTimeout", ["60"])[0]],
-        "allowInsecure": [query.get("insecure", query.get("allowInsecure", [""]))[0]],
-        "alpn": [query.get("alpn", ["h3"])[0] or "h3"],
+    sni = query.get("sni", [server_host])[0] or server_host
+    insecure = query.get("insecure", query.get("allowInsecure", ["0"]))[0] in {"1", "true", "True"}
+    outbound: dict = {
+        "type": "hysteria2",
+        "tag": "proxy",
+        "server": server_host,
+        "server_port": server_port,
+        "password": password,
+        "tls": {"enabled": True, "server_name": sni, "insecure": insecure},
     }
-    return {
-        "protocol": "hysteria",
-        "settings": {"version": 2, "address": server_host, "port": server_port},
-        "streamSettings": build_stream_settings(stream_query, server_host),
+    if query.get("alpn"):
+        outbound["tls"]["alpn"] = query["alpn"][0].split(",")
+    obfs_type = query.get("obfs", [""])[0]
+    if obfs_type:
+        outbound["obfs"] = {"type": obfs_type, "password": query.get("obfs-password", [""])[0]}
+    return outbound
+
+
+def generate_hysteria_v1_outbound(parsed: urllib.parse.ParseResult) -> dict:
+    """Legacy Hysteria v1 (hysteria://) - different wire format from v2/hy2."""
+    server_host = parsed.hostname
+    server_port = parsed.port or 443
+    if not server_host:
+        raise ValueError("invalid Hysteria URI: missing host")
+    query = urllib.parse.parse_qs(parsed.query)
+    auth = query.get("auth", [urllib.parse.unquote(parsed.username or "")])[0]
+    sni = query.get("peer", query.get("sni", [server_host]))[0] or server_host
+    outbound: dict = {
+        "type": "hysteria",
+        "tag": "proxy",
+        "server": server_host,
+        "server_port": server_port,
+        "up_mbps": int(query.get("upmbps", ["100"])[0] or 100),
+        "down_mbps": int(query.get("downmbps", ["100"])[0] or 100),
+        "tls": {"enabled": True, "server_name": sni},
     }
+    if auth:
+        outbound["auth_str"] = auth
+    if query.get("alpn"):
+        outbound["tls"]["alpn"] = query["alpn"][0].split(",")
+    if query.get("insecure", ["0"])[0] in {"1", "true", "True"}:
+        outbound["tls"]["insecure"] = True
+    obfs = query.get("obfs", [""])[0]
+    if obfs:
+        outbound["obfs"] = obfs
+    return outbound
 
 
 def make_base_config(listen_port: int, outbound: dict) -> dict:
     return {
-        "log": {"loglevel": "none"},
-        "inbounds": [{"listen": "127.0.0.1", "port": listen_port, "protocol": "socks", "settings": {"auth": "noauth", "udp": True}}],
+        "log": {"level": "error"},
+        "inbounds": [{
+            "type": "socks",
+            "tag": "socks-in",
+            "listen": "127.0.0.1",
+            "listen_port": listen_port,
+            "sniff": False,
+        }],
         "outbounds": [outbound],
     }
 
 
-def generate_xray_config(uri: str, listen_port: int) -> dict:
+def generate_singbox_config(uri: str, listen_port: int) -> dict:
     parsed = urllib.parse.urlparse(uri)
     scheme = parsed.scheme.lower()
     if scheme == "vless":
@@ -748,8 +802,10 @@ def generate_xray_config(uri: str, listen_port: int) -> dict:
         outbound = generate_shadowsocks_outbound(parsed)
     elif scheme == "vmess":
         outbound = generate_vmess_outbound(uri)
-    elif scheme in {"hysteria", "hysteria2", "hy2"}:
-        outbound = generate_hysteria_outbound(parsed)
+    elif scheme in {"hysteria2", "hy2"}:
+        outbound = generate_hysteria2_outbound(parsed)
+    elif scheme == "hysteria":
+        outbound = generate_hysteria_v1_outbound(parsed)
     else:
         raise ValueError(f"unsupported protocol: {scheme or 'unknown'}")
     return make_base_config(listen_port, outbound)
@@ -780,18 +836,46 @@ def get_old_remark(uri: str) -> str:
     return decode_fragment(urllib.parse.urlparse(uri).fragment)
 
 
-def get_uri_server_host(uri: str) -> str | None:
-    """Bare server hostname/IP straight from the share link, no proxying required."""
+def get_uri_server_endpoint(uri: str) -> tuple[str | None, int | None]:
+    """(host, port) straight from the share link, no proxying required."""
     scheme = urllib.parse.urlparse(uri).scheme.lower()
     if scheme == "vmess" and "@" not in uri.removeprefix("vmess://"):
         try:
             data, _remark = parse_vmess_uri(uri)
             host = data.get("add") or data.get("address")
-            return str(host) if host else None
+            port = data.get("port")
+            return (str(host) if host else None, int(port) if port else None)
         except Exception:
-            return None
-    host = urllib.parse.urlparse(uri).hostname
-    return host
+            return None, None
+    parsed = urllib.parse.urlparse(uri)
+    try:
+        port = parsed.port
+    except ValueError:
+        port = None
+    return parsed.hostname, port
+
+
+def get_uri_server_host(uri: str) -> str | None:
+    """Bare server hostname/IP straight from the share link, no proxying required."""
+    return get_uri_server_endpoint(uri)[0]
+
+
+_PLACEHOLDER_HOSTS = {"0.0.0.0", "::", "0000:0000:0000:0000:0000:0000:0000:0000"}
+
+
+def is_placeholder_endpoint(uri: str) -> bool:
+    """
+    Catches obviously-dead stub entries some subscriptions leave behind for
+    expired plans (e.g. server 0.0.0.0, port 1). There's nothing to resolve
+    or geoip here, so these should be dropped entirely rather than showing
+    up unrenamed in unstable.
+    """
+    host, port = get_uri_server_endpoint(uri)
+    if not host or host in _PLACEHOLDER_HOSTS:
+        return True
+    if port is not None and port <= 1:
+        return True
+    return False
 
 
 def resolve_host_ip(host: str | None) -> str | None:
@@ -887,7 +971,7 @@ def format_results(results: list[CheckResult], remark_format: str, is_working: b
     return output
 
 
-def check_proxy(uri: str, xray_path: str, geoip_path: Path, timeout: float, temp_dir: Path, progress: Progress, remark_language: str) -> CheckResult:
+def check_proxy(uri: str, singbox_path: str, geoip_path: Path, timeout: float, temp_dir: Path, progress: Progress, remark_language: str) -> CheckResult:
     scheme = urllib.parse.urlparse(uri).scheme.lower()
     if scheme not in SUPPORTED_SCHEMES:
         progress.next()
@@ -898,19 +982,19 @@ def check_proxy(uri: str, xray_path: str, geoip_path: Path, timeout: float, temp
     process = None
     try:
         socks_port = get_free_port()
-        config_path = temp_dir / f"xray_{socks_port}.json"
-        config = generate_xray_config(uri, socks_port)
+        config_path = temp_dir / f"singbox_{socks_port}.json"
+        config = generate_singbox_config(uri, socks_port)
         config_path.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
 
         process = subprocess.Popen(
-            [xray_path, "run", "-c", str(config_path)],
+            [singbox_path, "run", "-c", str(config_path)],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             text=True,
         )
         time.sleep(0.7)
         if process.poll() is not None:
-            raise RuntimeError("xray exited before check")
+            raise RuntimeError("sing-box exited before check")
 
         proxies = {"http": f"socks5h://127.0.0.1:{socks_port}", "https": f"socks5h://127.0.0.1:{socks_port}"}
         start_time = time.perf_counter()
@@ -968,7 +1052,7 @@ def fetch_all_subscriptions(urls: list[str], hwid: str | None) -> list[str]:
     return dedupe_links(collected, by_endpoint=False)
 
 
-def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_path: str, geoip_path: Path, threads: int, timeout: float, remark_format: str, remark_language: str) -> int:
+def update_default(default_path: Path, subs_path: Path, hwid: str | None, singbox_path: str, geoip_path: Path, threads: int, timeout: float, remark_format: str, remark_language: str) -> int:
     headers, _existing_links = split_default_file(default_path)
     subs = [line.strip() for line in subs_path.read_text(encoding="utf-8").splitlines() if line.strip()]
     if not subs:
@@ -977,6 +1061,12 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
 
     candidates = fetch_all_subscriptions(subs, hwid)
     candidates = dedupe_links(candidates, by_endpoint=True)
+
+    placeholder_candidates = [uri for uri in candidates if is_placeholder_endpoint(uri)]
+    if placeholder_candidates:
+        print(f"Skipping {len(placeholder_candidates)} placeholder/dead links (e.g. 0.0.0.0)")
+        candidates = [uri for uri in candidates if uri not in placeholder_candidates]
+
     print(f"Links to check: {len(candidates)}")
 
     results: list[CheckResult] = []
@@ -987,7 +1077,7 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
         temp_dir = Path(temp)
         with ThreadPoolExecutor(max_workers=max(1, threads)) as executor:
             futures = [
-                executor.submit(check_proxy, uri, xray_path, geoip_path, timeout, temp_dir, progress, remark_language)
+                executor.submit(check_proxy, uri, singbox_path, geoip_path, timeout, temp_dir, progress, remark_language)
                 for uri in candidates
             ]
             for future in as_completed(futures):
@@ -1015,7 +1105,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--default", type=Path, default=Path("default"))
     parser.add_argument("--subs", type=Path, required=True)
     parser.add_argument("--hwid")
-    parser.add_argument("--xray", default="./xray-bin/xray")
+    parser.add_argument("--sing-box", dest="sing_box", default="./sing-box-bin/sing-box")
     parser.add_argument("--geoip", type=Path, default=Path("GeoLite2-Country.mmdb"))
     parser.add_argument("--threads", type=int, default=24)
     parser.add_argument("--timeout", type=float, default=8.0)
@@ -1029,7 +1119,7 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.download_geoip or not args.geoip.exists():
         download_geoip(args.geoip)
-    return update_default(args.default, args.subs, args.hwid, args.xray, args.geoip, args.threads, args.timeout, args.remark_format, args.remark_language)
+    return update_default(args.default, args.subs, args.hwid, args.sing_box, args.geoip, args.threads, args.timeout, args.remark_format, args.remark_language)
 
 
 if __name__ == "__main__":
