@@ -44,6 +44,7 @@ class CheckResult:
     latency_ms: int
     protocol: str
     old_remark: str
+    is_working: bool
 
 
 class Progress:
@@ -750,25 +751,38 @@ def format_remark(template: str, item: CheckResult, index: int, total: int) -> s
     return template.format(**values)
 
 
-def format_results(results: list[CheckResult], remark_format: str) -> list[str]:
-    groups: dict[str, list[CheckResult]] = defaultdict(list)
-    for result in results:
-        groups[result.country_name].append(result)
+def format_results(results: list[CheckResult], remark_format: str, include_failed: bool) -> list[str]:
     output: list[str] = []
-    for country_name in sorted(groups):
-        items = sorted(groups[country_name], key=lambda item: item.latency_ms)
-        for index, item in enumerate(items, start=1):
+    working = [r for r in results if r.is_working]
+    failed = [r for r in results if not r.is_working]
+    working.sort(key=lambda r: (r.country_name, r.latency_ms))
+    for index, item in enumerate(working, start=1):
+        parsed = urllib.parse.urlparse(item.uri)
+        values = {
+            "flag": get_unicode_flag(item.country_code),
+            "country": item.country_name,
+            "index": str(index),
+            "index_suffix": f" {index}" if len(working) > 1 else "",
+            "old": item.old_remark,
+            "protocol": item.protocol.upper(),
+            "latency_ms": str(item.latency_ms),
+            "ip": item.real_ip,
+        }
+        remark = f"✅ {remark_format.format(**values)}".strip()
+        output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
+    if include_failed:
+        for item in failed:
             parsed = urllib.parse.urlparse(item.uri)
-            remark = format_remark(remark_format, item, index, len(items))
+            remark = item.old_remark or "Failed"
             output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
     return output
 
 
-def check_proxy(uri: str, xray_path: str, geoip_path: Path, timeout: float, temp_dir: Path, progress: Progress, remark_language: str) -> CheckResult | None:
+def check_proxy(uri: str, xray_path: str, geoip_path: Path, timeout: float, temp_dir: Path, progress: Progress, remark_language: str) -> CheckResult:
     scheme = urllib.parse.urlparse(uri).scheme.lower()
     if scheme not in SUPPORTED_SCHEMES:
         progress.next()
-        return None
+        return CheckResult(uri=uri, country_name="Unknown", country_code="UN", real_ip="", latency_ms=-1, protocol=scheme, old_remark=get_old_remark(uri), is_working=False)
 
     config_path: Path | None = None
     process = None
@@ -802,11 +816,11 @@ def check_proxy(uri: str, xray_path: str, geoip_path: Path, timeout: float, temp
 
         step = progress.next()
         print(f"[{step}/{progress.total}] [OK] {real_ip} -> {country_name} ({latency_ms} ms)")
-        return CheckResult(uri=uri, country_name=country_name, country_code=country_code, real_ip=real_ip, latency_ms=latency_ms, protocol=scheme, old_remark=get_old_remark(uri))
+        return CheckResult(uri=uri, country_name=country_name, country_code=country_code, real_ip=real_ip, latency_ms=latency_ms, protocol=scheme, old_remark=get_old_remark(uri), is_working=True)
     except Exception:
         step = progress.next()
         print(f"[{step}/{progress.total}] [FAIL] {uri[:55]}...")
-        return None
+        return CheckResult(uri=uri, country_name="Unknown", country_code="UN", real_ip="", latency_ms=-1, protocol=scheme, old_remark=get_old_remark(uri), is_working=False)
     finally:
         if process:
             process.terminate()
@@ -854,6 +868,9 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
 
     results: list[CheckResult] = []
     progress = Progress(len(candidates))
+    unstable_path = default_path.parent / "unstable"
+    include_failed = unstable_path.exists()
+
     with tempfile.TemporaryDirectory(prefix="default_updater_") as temp:
         temp_dir = Path(temp)
         with ThreadPoolExecutor(max_workers=max(1, threads)) as executor:
@@ -863,12 +880,19 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
             ]
             for future in as_completed(futures):
                 result = future.result()
-                if result is not None:
-                    results.append(result)
+                results.append(result)
 
-    renamed = format_results(results, remark_format)
+    renamed = format_results(results, remark_format, include_failed)
     write_default_file(default_path, headers, renamed)
-    print(f"Done: wrote {len(renamed)} working links to {default_path}")
+    
+    working_count = sum(1 for r in results if r.is_working)
+    failed_count = len(results) - working_count
+    
+    if include_failed:
+        print(f"Done: wrote {working_count} working and {failed_count} failed links to {default_path}")
+    else:
+        print(f"Done: wrote {working_count} working links to {default_path}")
+        
     return 0
 
 
