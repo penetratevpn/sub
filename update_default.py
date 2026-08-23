@@ -1,6 +1,7 @@
 import argparse
 import base64
 import html
+import ipaddress
 import json
 import os
 import re
@@ -152,6 +153,29 @@ def build_url_from_outbound(outbound: dict, remarks: str, urls: list[str]) -> No
             urls.append(f"ss://{auth}@{address}:{port}#{tag}")
         return
 
+    if proto == "hysteria":
+        # NOTE: this was previously not handled at all - hysteria outbounds
+        # were silently dropped when converting a JSON config back to a link.
+        settings = outbound.get("settings", {}) or {}
+        address = settings.get("address")
+        port = settings.get("port")
+        stream = outbound.get("streamSettings", {}) or {}
+        tls = stream.get("tlsSettings", {}) if isinstance(stream, dict) else {}
+        hy = stream.get("hysteriaSettings", {}) if isinstance(stream, dict) else {}
+        auth = hy.get("auth", "")
+        if not (address and port and auth):
+            return
+        hy_params: dict[str, str] = {}
+        if tls.get("serverName"):
+            hy_params["sni"] = str(tls["serverName"])
+        if isinstance(tls.get("alpn"), list):
+            hy_params["alpn"] = ",".join(str(item) for item in tls["alpn"])
+        if tls.get("allowInsecure"):
+            hy_params["insecure"] = "1"
+        query_string = urllib.parse.urlencode(hy_params)
+        urls.append(f"hysteria2://{urllib.parse.quote(str(auth))}@{address}:{port}?{query_string}#{tag}")
+        return
+
     if proto in {"vmess", "vless"}:
         vnext = get_nested(outbound, ["settings", "vnext", 0])
         user = get_nested(outbound, ["settings", "vnext", 0, "users", 0])
@@ -180,12 +204,19 @@ def build_url_from_outbound(outbound: dict, remarks: str, urls: list[str]) -> No
         params["allowInsecure"] = "1"
     if isinstance(tls.get("alpn"), list):
         params["alpn"] = ",".join(str(item) for item in tls["alpn"])
+    elif isinstance(reality.get("alpn"), list):
+        # reality configs sometimes carry alpn here instead of tlsSettings
+        params["alpn"] = ",".join(str(item) for item in reality["alpn"])
     if tls.get("serverName"):
         params["sni"] = str(tls["serverName"])
     elif reality.get("serverName"):
         params["sni"] = str(reality["serverName"])
     if tls.get("fingerprint"):
         params["fp"] = str(tls["fingerprint"])
+    elif reality.get("fingerprint"):
+        # previously fp was only ever read from tlsSettings, so it was
+        # silently dropped for every reality (tlsSettings-less) config
+        params["fp"] = str(reality["fingerprint"])
     if reality.get("publicKey"):
         params["pbk"] = str(reality["publicKey"])
     if reality.get("shortId"):
@@ -220,6 +251,13 @@ def build_url_from_outbound(outbound: dict, remarks: str, urls: list[str]) -> No
         host_value = settings.get("host", "")
         host = host_value[0] if isinstance(host_value, list) and host_value else host_value
         path = settings.get("path", "")
+    elif network == "grpc":
+        # previously missing entirely - serviceName/mode were silently dropped
+        settings = stream.get("grpcSettings", {}) if isinstance(stream, dict) else {}
+        if settings.get("serviceName"):
+            params["serviceName"] = str(settings["serviceName"])
+        if settings.get("multiMode"):
+            params["mode"] = "multi"
     elif network == "tcp" and get_nested(stream, ["tcpSettings", "header", "type"]) == "http":
         request = get_nested(stream, ["tcpSettings", "header", "request"]) or {}
         hosts = get_nested(request, ["headers", "Host"])
@@ -737,10 +775,67 @@ def get_old_remark(uri: str) -> str:
     return decode_fragment(urllib.parse.urlparse(uri).fragment)
 
 
+def get_uri_server_host(uri: str) -> str | None:
+    """Bare server hostname/IP straight from the share link, no proxying required."""
+    scheme = urllib.parse.urlparse(uri).scheme.lower()
+    if scheme == "vmess" and "@" not in uri.removeprefix("vmess://"):
+        try:
+            data, _remark = parse_vmess_uri(uri)
+            host = data.get("add") or data.get("address")
+            return str(host) if host else None
+        except Exception:
+            return None
+    host = urllib.parse.urlparse(uri).hostname
+    return host
+
+
+def resolve_host_ip(host: str | None) -> str | None:
+    """Return host unchanged if it's already an IP, otherwise resolve it via DNS."""
+    if not host:
+        return None
+    try:
+        ipaddress.ip_address(host)
+        return host
+    except ValueError:
+        pass
+    try:
+        return socket.gethostbyname(host)
+    except Exception:
+        return None
+
+
+def geoip_lookup_ip(geoip_path: Path, ip: str | None, language: str) -> tuple[str, str] | None:
+    if not ip:
+        return None
+    try:
+        with geoip2.database.Reader(str(geoip_path)) as reader:
+            return lookup_country(reader, ip, language)
+    except Exception:
+        return None
+
+
+def resolve_uri_geo(uri: str, geoip_path: Path, remark_language: str) -> tuple[str, str, str]:
+    """
+    Best-effort geo lookup for a link's server address, used when the live
+    connectivity check fails (or the protocol isn't even supported for
+    checking). We never routed through the (dead) proxy for this - we just
+    take the address straight from the link, resolve it via DNS if it's a
+    domain, and geoip that IP directly. This is what lets "unstable" links
+    get a proper country remark instead of just "Failed".
+    """
+    host = get_uri_server_host(uri)
+    ip = resolve_host_ip(host)
+    geo = geoip_lookup_ip(geoip_path, ip, remark_language)
+    if geo:
+        country_code, country_name = geo
+        return country_code, country_name, ip or ""
+    return "UN", "Unknown", ip or ""
+
+
 def format_results(results: list[CheckResult], remark_format: str, is_working: bool) -> list[str]:
     output: list[str] = []
     sorted_results = sorted(results, key=lambda r: (r.country_name, r.latency_ms))
-    
+
     for index, item in enumerate(sorted_results, start=1):
         parsed = urllib.parse.urlparse(item.uri)
         values = {
@@ -755,6 +850,10 @@ def format_results(results: list[CheckResult], remark_format: str, is_working: b
         }
         if is_working:
             remark = f"✅ {remark_format.format(**values)}".strip()
+        elif item.country_code != "UN":
+            # we managed to resolve/geoip the server address even though the
+            # live check failed - still worth showing where it is
+            remark = f"❌ {remark_format.format(**values)}".strip()
         else:
             remark = item.old_remark or "Failed"
         output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
@@ -765,7 +864,8 @@ def check_proxy(uri: str, xray_path: str, geoip_path: Path, timeout: float, temp
     scheme = urllib.parse.urlparse(uri).scheme.lower()
     if scheme not in SUPPORTED_SCHEMES:
         progress.next()
-        return CheckResult(uri=uri, country_name="Unknown", country_code="UN", real_ip="", latency_ms=-1, protocol=scheme, old_remark=get_old_remark(uri), is_working=False)
+        country_code, country_name, real_ip = resolve_uri_geo(uri, geoip_path, remark_language)
+        return CheckResult(uri=uri, country_name=country_name, country_code=country_code, real_ip=real_ip, latency_ms=-1, protocol=scheme, old_remark=get_old_remark(uri), is_working=False)
 
     config_path: Path | None = None
     process = None
@@ -803,7 +903,10 @@ def check_proxy(uri: str, xray_path: str, geoip_path: Path, timeout: float, temp
     except Exception:
         step = progress.next()
         print(f"[{step}/{progress.total}] [FAIL] {uri[:55]}...")
-        return CheckResult(uri=uri, country_name="Unknown", country_code="UN", real_ip="", latency_ms=-1, protocol=scheme, old_remark=get_old_remark(uri), is_working=False)
+        # proxy check failed, but we can still try to place the server on the
+        # map: pull its address straight from the link and geoip that.
+        country_code, country_name, real_ip = resolve_uri_geo(uri, geoip_path, remark_language)
+        return CheckResult(uri=uri, country_name=country_name, country_code=country_code, real_ip=real_ip, latency_ms=-1, protocol=scheme, old_remark=get_old_remark(uri), is_working=False)
     finally:
         if process:
             process.terminate()
@@ -852,7 +955,7 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
     results: list[CheckResult] = []
     progress = Progress(len(candidates))
     unstable_path = default_path.parent / "unstable"
-    
+
     with tempfile.TemporaryDirectory(prefix="default_updater_") as temp:
         temp_dir = Path(temp)
         with ThreadPoolExecutor(max_workers=max(1, threads)) as executor:
@@ -866,10 +969,10 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
 
     working_results = [r for r in results if r.is_working]
     failed_results = [r for r in results if not r.is_working]
-    
+
     working_links = format_results(working_results, remark_format, is_working=True)
     write_default_file(default_path, headers, working_links)
-    
+
     if unstable_path.exists():
         unstable_headers, _ = split_default_file(unstable_path)
         failed_links = format_results(failed_results, remark_format, is_working=False)
@@ -877,7 +980,7 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
         print(f"Done: wrote {len(working_links)} working links to {default_path} and {len(failed_links)} failed links to {unstable_path}")
     else:
         print(f"Done: wrote {len(working_links)} working links to {default_path} (unstable file not found, failed links discarded)")
-        
+
     return 0
 
 
