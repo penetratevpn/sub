@@ -121,17 +121,24 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          
-          # Add default file if changed
+
+          changed=false
+
           if ! git diff --quiet -- default; then
             git add default
-            echo "default_changed=true" >> $GITHUB_ENV
+            changed=true
           fi
-          
-          # Add unstable file if changed
+
           if ! git diff --quiet -- unstable; then
             git add unstable
-            echo "unstable_changed=true" >> $GITHUB_ENV
+            changed=true
+          fi
+
+          if [ "$changed" = true ]; then
+            git commit -m 'chore: refresh default and unstable subscriptions'
+            git push
+          else
+            echo 'No changes to commit'
           fi
           
           # Commit if any files changed
