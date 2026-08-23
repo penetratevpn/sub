@@ -1,4 +1,4 @@
-name: 'Refresh default subscription'
+name: 'Refresh subscription'
 on:
   workflow_dispatch:
   schedule:
@@ -19,7 +19,7 @@ jobs:
       SUBS_SECRET: ${{ secrets.VPN_SUBS }}
       HWID_SECRET: ${{ secrets.VPN_HWID }}
       SINGBOX_VERSION: '1.13.19'
-      THREADS: '4'
+      THREADS: '8'
       TIMEOUT: '8'
       REMARK_FORMAT: '{flag} {country}{index_suffix}'
       REMARK_LANGUAGE: 'ru'
@@ -58,7 +58,7 @@ jobs:
       - name: Refresh default file
         run: |
           if [ -n "$HWID_SECRET" ]; then
-            python update_default.py \
+            python update.py \
               --default default \
               --subs subs.private.txt \
               --hwid "$HWID_SECRET" \
@@ -69,7 +69,7 @@ jobs:
               --remark-format "$REMARK_FORMAT" \
               --remark-language "$REMARK_LANGUAGE"
           else
-            python update_default.py \
+            python update.py \
               --default default \
               --subs subs.private.txt \
               --sing-box ./sing-box-bin/sing-box \
