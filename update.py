@@ -941,16 +941,10 @@ def format_results(results: list[CheckResult], remark_format: str, is_working: b
         for index, item in enumerate(sorted_results, start=1):
             parsed = urllib.parse.urlparse(item.uri)
             values = _remark_values(item, index, len(sorted_results))
-            remark = f"✅ {remark_format.format(**values)}".strip()
+            remark = f"{remark_format.format(**values)} ✅".strip()
             output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
         return output
 
-    # unstable file: entries we managed to geo-resolve (know the real
-    # server location even though the live check failed) get a ✅ and are
-    # placed first, in their own country-sorted block, no matter what
-    # index they'd otherwise land on. Everything we couldn't resolve at
-    # all goes after, completely undecorated - no ❌, no "Failed", just
-    # whatever remark it already had (or nothing).
     resolved = [r for r in results if r.country_code != "UN"]
     unresolved = [r for r in results if r.country_code == "UN"]
     resolved_sorted = sorted(resolved, key=lambda r: r.country_name)
@@ -959,7 +953,7 @@ def format_results(results: list[CheckResult], remark_format: str, is_working: b
     for index, item in enumerate(resolved_sorted, start=1):
         parsed = urllib.parse.urlparse(item.uri)
         values = _remark_values(item, index, len(resolved_sorted))
-        remark = f"✅ {remark_format.format(**values)}".strip()
+        remark = f"{remark_format.format(**values)} ✅".strip()
         output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
 
     for item in unresolved:
