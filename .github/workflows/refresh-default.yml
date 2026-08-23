@@ -18,7 +18,7 @@ jobs:
       PYTHONUNBUFFERED: '1'
       SUBS_SECRET: ${{ secrets.VPN_SUBS }}
       HWID_SECRET: ${{ secrets.VPN_HWID }}
-      SINGBOX_VERSION: '1.13.3'
+      SINGBOX_VERSION: '1.13.19'
       THREADS: '4'
       TIMEOUT: '8'
       REMARK_FORMAT: '{flag} {country}{index_suffix}'
