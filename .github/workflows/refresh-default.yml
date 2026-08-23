@@ -18,7 +18,7 @@ jobs:
       PYTHONUNBUFFERED: '1'
       SUBS_SECRET: ${{ secrets.VPN_SUBS }}
       HWID_SECRET: ${{ secrets.VPN_HWID }}
-      XRAY_VERSION: '1.8.24'
+      SINGBOX_VERSION: '1.13.3'
       THREADS: '4'
       TIMEOUT: '8'
       REMARK_FORMAT: '{flag} {country}{index_suffix}'
@@ -37,16 +37,14 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install -r requirements.txt
 
-      - name: Install Xray
+      - name: Install sing-box
         run: |
-          curl -fsSL -o xray.zip https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-64.zip
-          python - <<'PY'
-          import zipfile
-          with zipfile.ZipFile('xray.zip') as zf:
-              zf.extractall('xray-bin')
-          PY
-          chmod +x xray-bin/xray
-          ./xray-bin/xray version
+          curl -fsSL -o sing-box.tar.gz \
+            "https://github.com/SagerNet/sing-box/releases/download/v${SINGBOX_VERSION}/sing-box-${SINGBOX_VERSION}-linux-amd64.tar.gz"
+          mkdir -p sing-box-bin
+          tar -xzf sing-box.tar.gz -C sing-box-bin --strip-components=1
+          chmod +x sing-box-bin/sing-box
+          ./sing-box-bin/sing-box version
 
       - name: Validate required secrets
         run: |
@@ -64,7 +62,7 @@ jobs:
               --default default \
               --subs subs.private.txt \
               --hwid "$HWID_SECRET" \
-              --xray ./xray-bin/xray \
+              --sing-box ./sing-box-bin/sing-box \
               --download-geoip \
               --threads "$THREADS" \
               --timeout "$TIMEOUT" \
@@ -74,7 +72,7 @@ jobs:
             python update_default.py \
               --default default \
               --subs subs.private.txt \
-              --xray ./xray-bin/xray \
+              --sing-box ./sing-box-bin/sing-box \
               --download-geoip \
               --threads "$THREADS" \
               --timeout "$TIMEOUT" \
@@ -108,7 +106,7 @@ jobs:
               exit(0)
 
           processed_lines = [replace_fingerprint(line) for line in lines]
-          
+
           with open('default', 'w', encoding='utf-8') as f:
               f.writelines(processed_lines)
 
@@ -135,14 +133,6 @@ jobs:
           fi
 
           if [ "$changed" = true ]; then
-            git commit -m 'chore: refresh default and unstable subscriptions'
-            git push
-          else
-            echo 'No changes to commit'
-          fi
-          
-          # Commit if any files changed
-          if [ "${{ env.default_changed }}" = "true" ] || [ "${{ env.unstable_changed }}" = "true" ]; then
             git commit -m 'chore: refresh default and unstable subscriptions'
             git push
           else
