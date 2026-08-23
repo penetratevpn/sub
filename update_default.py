@@ -737,44 +737,27 @@ def get_old_remark(uri: str) -> str:
     return decode_fragment(urllib.parse.urlparse(uri).fragment)
 
 
-def format_remark(template: str, item: CheckResult, index: int, total: int) -> str:
-    values = {
-        "flag": get_unicode_flag(item.country_code),
-        "country": item.country_name,
-        "index": str(index),
-        "index_suffix": f" {index}" if total > 1 else "",
-        "old": item.old_remark,
-        "protocol": item.protocol.upper(),
-        "latency_ms": str(item.latency_ms),
-        "ip": item.real_ip,
-    }
-    return template.format(**values)
-
-
-def format_results(results: list[CheckResult], remark_format: str, include_failed: bool) -> list[str]:
+def format_results(results: list[CheckResult], remark_format: str, is_working: bool) -> list[str]:
     output: list[str] = []
-    working = [r for r in results if r.is_working]
-    failed = [r for r in results if not r.is_working]
-    working.sort(key=lambda r: (r.country_name, r.latency_ms))
-    for index, item in enumerate(working, start=1):
+    sorted_results = sorted(results, key=lambda r: (r.country_name, r.latency_ms))
+    
+    for index, item in enumerate(sorted_results, start=1):
         parsed = urllib.parse.urlparse(item.uri)
         values = {
             "flag": get_unicode_flag(item.country_code),
             "country": item.country_name,
             "index": str(index),
-            "index_suffix": f" {index}" if len(working) > 1 else "",
+            "index_suffix": f" {index}" if len(sorted_results) > 1 else "",
             "old": item.old_remark,
             "protocol": item.protocol.upper(),
             "latency_ms": str(item.latency_ms),
             "ip": item.real_ip,
         }
-        remark = f"✅ {remark_format.format(**values)}".strip()
-        output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
-    if include_failed:
-        for item in failed:
-            parsed = urllib.parse.urlparse(item.uri)
+        if is_working:
+            remark = f"✅ {remark_format.format(**values)}".strip()
+        else:
             remark = item.old_remark or "Failed"
-            output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
+        output.append(urllib.parse.urlunparse(parsed._replace(fragment=urllib.parse.quote(remark))))
     return output
 
 
@@ -869,8 +852,7 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
     results: list[CheckResult] = []
     progress = Progress(len(candidates))
     unstable_path = default_path.parent / "unstable"
-    include_failed = unstable_path.exists()
-
+    
     with tempfile.TemporaryDirectory(prefix="default_updater_") as temp:
         temp_dir = Path(temp)
         with ThreadPoolExecutor(max_workers=max(1, threads)) as executor:
@@ -882,16 +864,19 @@ def update_default(default_path: Path, subs_path: Path, hwid: str | None, xray_p
                 result = future.result()
                 results.append(result)
 
-    renamed = format_results(results, remark_format, include_failed)
-    write_default_file(default_path, headers, renamed)
+    working_results = [r for r in results if r.is_working]
+    failed_results = [r for r in results if not r.is_working]
     
-    working_count = sum(1 for r in results if r.is_working)
-    failed_count = len(results) - working_count
+    working_links = format_results(working_results, remark_format, is_working=True)
+    write_default_file(default_path, headers, working_links)
     
-    if include_failed:
-        print(f"Done: wrote {working_count} working and {failed_count} failed links to {default_path}")
+    if unstable_path.exists():
+        unstable_headers, _ = split_default_file(unstable_path)
+        failed_links = format_results(failed_results, remark_format, is_working=False)
+        write_default_file(unstable_path, unstable_headers, failed_links)
+        print(f"Done: wrote {len(working_links)} working links to {default_path} and {len(failed_links)} failed links to {unstable_path}")
     else:
-        print(f"Done: wrote {working_count} working links to {default_path}")
+        print(f"Done: wrote {len(working_links)} working links to {default_path} (unstable file not found, failed links discarded)")
         
     return 0
 
